@@ -23,7 +23,8 @@ RUN apt-get update && apt-get install -y sudo
 # 添加用户：赋予sudo权限，指定密码
 RUN useradd --create-home --no-log-init --shell /bin/bash ${user} \
     && adduser ${user} sudo \
-    && echo "${user}:$PASSWD" | chpasswd
+    && echo "${user}:$PASSWD" | chpasswd \
+    && bash -c 'echo "your_user ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/99_sudo_include_file'
     
 
 # 改变用户的UID和GID
