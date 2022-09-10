@@ -14,7 +14,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
 ARG user=ubuntu
 
 # 设定密码
-RUN echo "${user}:$PASSWD" | chpasswd
+RUN echo "root:$PASSWD" | chpasswd
 
 # 安装依赖
 RUN apt-get update && apt-get install -y sudo 
