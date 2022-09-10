@@ -64,7 +64,7 @@ RUN echo "#!/bin/bash\n" > /home/${user}/startup.sh && \
     # SSH
     echo "/usr/sbin/sshd -D & source /home/${user}/.bashrc" >> /home/${user}/startup.sh && \
     # VNC
-    x11vnc -auth guess -forever -loop -noxdamage -repeat -rfbauth /home/${user}/.vnc/passwd -rfbport 5900 -shared 
+    x11vnc -auth guess -forever -loop -noxdamage -repeat -rfbauth /home/${user}/.vnc/passwd -rfbport 5900 -shared && \
     # 可执行脚本
     chmod +x /home/${user}/startup.sh
 
