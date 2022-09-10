@@ -10,7 +10,6 @@ ENV DEBIAN_FRONTEND=noninteractive \
     LANG=zh_CN.UTF-8 \
     LC_ALL=${LANG} \
     LANGUAGE=${LANG}
-    SUDO_ASKPASS=ubuntu
     
 ARG user=ubuntu
 
