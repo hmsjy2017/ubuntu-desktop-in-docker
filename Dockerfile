@@ -46,8 +46,8 @@ RUN apt-get -y update && \
     mkdir -p /home/${user}/.ssh && \
     # x11vnc 
     apt-get install -y x11vnc && \
-    mkdir -pv /home/${user}/.vnc
-    x11vnc -storepasswd $PASSWD /home/${user}/.vnc/passwd
+    mkdir -pv /home/${user}/.vnc && \
+    x11vnc -storepasswd $PASSWD /home/${user}/.vnc/passwd && \
     # ubuntu-desktop
     apt-get install -y ubuntu-desktop && \
     apt-get install -y gnome-panel gnome-settings-daemon metacity nautilus gnome-terminal lightdm && \
