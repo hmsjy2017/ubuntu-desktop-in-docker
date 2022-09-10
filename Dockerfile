@@ -10,6 +10,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
     LANG=zh_CN.UTF-8 \
     LC_ALL=${LANG} \
     LANGUAGE=${LANG}
+    SUDO_ASKPASS=ubuntu
     
 ARG user=ubuntu
 
@@ -23,6 +24,7 @@ RUN apt-get update && apt-get install -y sudo
 RUN useradd --create-home --no-log-init --shell /bin/bash ${user} \
     && adduser ${user} sudo \
     && echo "${user}:$PASSWD" | chpasswd
+    
 
 # 改变用户的UID和GID
 # RUN usermod -u 1000 ${user} && usermod -G 1000 ${user}
@@ -30,30 +32,27 @@ RUN useradd --create-home --no-log-init --shell /bin/bash ${user} \
 # 指定容器起来的工作目录
 WORKDIR /home/${user}
 
-# 指定容器起来的登录用户
-USER ${user}
-
 # 安装
-RUN sudo apt-get -y update && \
+RUN apt-get -y update && \
     # tools
-    sudo apt-get install -y vim git wget curl net-tools locales bzip2 unzip iputils-ping traceroute firefox firefox-locale-zh-hans ttf-wqy-microhei gedit ibus-pinyin && \
+    apt-get install -y vim git wget curl net-tools locales bzip2 unzip iputils-ping traceroute firefox firefox-locale-zh-hans ttf-wqy-microhei gedit ibus-pinyin && \
     locale-gen zh_CN.UTF-8 && \
     # ssh
-    sudo apt-get install -y openssh-server && \
-    sudo mkdir -p /var/run/sshd && \
-    sudo sed -ri 's/^#?PermitRootLogin\s+.*/PermitRootLogin yes/' /etc/ssh/sshd_config && \
-    sudo sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config && \
+    apt-get install -y openssh-server && \
+    mkdir -p /var/run/sshd && \
+    sed -ri 's/^#?PermitRootLogin\s+.*/PermitRootLogin yes/' /etc/ssh/sshd_config && \
+    sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config && \
     mkdir -p /home/${user}/.ssh && \
     # x11vnc 
-    sudo apt-get install -y x11vnc && \
+    apt-get install -y x11vnc && \
     mkdir -pv /home/${user}/.vnc && \
     x11vnc -storepasswd $PASSWD /home/${user}/.vnc/passwd && \
     # ubuntu-desktop
-    sudo apt-get install -y ubuntu-desktop && \
-    sudo apt-get install -y gnome-panel gnome-settings-daemon metacity nautilus gnome-terminal lightdm && \
+    apt-get install -y ubuntu-desktop && \
+    apt-get install -y gnome-panel gnome-settings-daemon metacity nautilus gnome-terminal lightdm && \
     # clean
-    sudo apt-get -y clean && \
-    sudo rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+    apt-get -y clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # 创建脚本文件
 RUN echo "#!/bin/bash\n" > /home/${user}/startup.sh && \
@@ -71,6 +70,7 @@ RUN echo "#!/bin/bash\n" > /home/${user}/startup.sh && \
 # 用户目录不使用中文
 RUN LANG=C xdg-user-dirs-update --force
 
+USER ${user}
 
 # 导出特定端口
 EXPOSE 22 5900
