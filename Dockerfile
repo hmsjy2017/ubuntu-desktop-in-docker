@@ -34,26 +34,26 @@ WORKDIR /home/${user}
 USER ${user}
 
 # 安装
-RUN apt-get -y update && \
+RUN sudo apt-get -y update && \
     # tools
-    apt-get install -y vim git wget curl net-tools locales bzip2 unzip iputils-ping traceroute firefox firefox-locale-zh-hans ttf-wqy-microhei gedit ibus-pinyin && \
+    sudo apt-get install -y vim git wget curl net-tools locales bzip2 unzip iputils-ping traceroute firefox firefox-locale-zh-hans ttf-wqy-microhei gedit ibus-pinyin && \
     locale-gen zh_CN.UTF-8 && \
     # ssh
-    apt-get install -y openssh-server && \
-    mkdir -p /var/run/sshd && \
-    sed -ri 's/^#?PermitRootLogin\s+.*/PermitRootLogin yes/' /etc/ssh/sshd_config && \
-    sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config && \
+    sudo apt-get install -y openssh-server && \
+    sudo mkdir -p /var/run/sshd && \
+    sudo sed -ri 's/^#?PermitRootLogin\s+.*/PermitRootLogin yes/' /etc/ssh/sshd_config && \
+    sudo sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config && \
     mkdir -p /home/${user}/.ssh && \
     # x11vnc 
-    apt-get install -y x11vnc && \
+    sudo apt-get install -y x11vnc && \
     mkdir -pv /home/${user}/.vnc && \
     x11vnc -storepasswd $PASSWD /home/${user}/.vnc/passwd && \
     # ubuntu-desktop
-    apt-get install -y ubuntu-desktop && \
-    apt-get install -y gnome-panel gnome-settings-daemon metacity nautilus gnome-terminal lightdm && \
+    sudo apt-get install -y ubuntu-desktop && \
+    sudo apt-get install -y gnome-panel gnome-settings-daemon metacity nautilus gnome-terminal lightdm && \
     # clean
-    apt-get -y clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+    sudo apt-get -y clean && \
+    sudo rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # 创建脚本文件
 RUN echo "#!/bin/bash\n" > /home/${user}/startup.sh && \
